@@ -1,4 +1,4 @@
-package br.com.fiap.clyvovet.config;
+package br.com.fiap.clyvopaws.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
@@ -17,7 +17,6 @@ public class SwaggerConfig {
                         .description("API RESTful para o Sistema de Cuidado Contínuo e Plano de Alta Inteligente da Clyvo Vet.")
                         .version("v1.0.0")
                         .contact(new Contact()
-                                .name("Equipe [Nome da sua Equipe]")
-                                .email("contato@equipe.fiap.com.br")));
+                                .name("Equipe [LevelUp]")));
     }
 }
