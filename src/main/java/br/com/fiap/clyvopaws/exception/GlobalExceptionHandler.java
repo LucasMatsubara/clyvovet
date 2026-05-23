@@ -1,37 +1,68 @@
 package br.com.fiap.clyvopaws.exception;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.List;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<String> handleEntityNotFound(EntityNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    public ResponseEntity<ErroPadrao> tratarErro404(EntityNotFoundException e, HttpServletRequest request) {
+        ErroPadrao erro = new ErroPadrao(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Não Encontrado",
+                e.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    public ResponseEntity<ErroPadrao> tratarRegraDeNegocio(IllegalArgumentException e, HttpServletRequest request) {
+        ErroPadrao erro = new ErroPadrao(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Regra de Negócio/Requisição Inválida",
+                e.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    public ResponseEntity<ErroValidacao> tratarErroValidacao(MethodArgumentNotValidException e, HttpServletRequest request) {
+        List<ErroValidacao.CampoInvalido> campos = e.getBindingResult().getFieldErrors().stream()
+                .map(erro -> new ErroValidacao.CampoInvalido(erro.getField(), erro.getDefaultMessage()))
+                .toList();
+
+        ErroValidacao erro = new ErroValidacao(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Erro de Validação de Dados",
+                request.getRequestURI(),
+                campos
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErroPadrao> tratarErro500(Exception e, HttpServletRequest request) {
+        ErroPadrao erro = new ErroPadrao(
+                LocalDateTime.now(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Erro Interno no Servidor",
+                "Ocorreu um erro inesperado. Contate o suporte.",
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(erro);
     }
 }
