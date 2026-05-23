@@ -43,7 +43,6 @@ public class TutorService {
         return toResponseDTO(tutor);
     }
 
-    // Método auxiliar para converter a Entidade no DTO de resposta
     private TutorResponseDTO toResponseDTO(Tutor tutor) {
         return new TutorResponseDTO(
                 tutor.getId(),

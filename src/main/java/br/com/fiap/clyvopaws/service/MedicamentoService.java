@@ -50,7 +50,6 @@ public class MedicamentoService {
                 .collect(Collectors.toList());
     }
 
-    // REGRA DE NEGÓCIO DO APP: O tutor deu "Check" na dose do remédio
     @Transactional
     public HistoricoDoseResponseDTO registrarDose(HistoricoDoseRequestDTO request) {
         Medicamento medicamento = medicamentoRepository.findById(request.medicamentoId())

@@ -25,9 +25,9 @@ public class CatalogoPreventivo {
 
     private Integer idadeAlertaMeses;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 4000)
     private String dicaPrevencao;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 4000)
     private String cuidadosRecomendados;
 }

@@ -23,7 +23,7 @@ public class Consulta {
     @Column(length = 100)
     private String nomeVeterinario;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 4000)
     private String laudo;
 
     @ManyToOne(fetch = FetchType.LAZY)

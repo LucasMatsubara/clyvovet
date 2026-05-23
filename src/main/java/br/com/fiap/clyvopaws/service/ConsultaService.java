@@ -37,7 +37,6 @@ public class ConsultaService {
         return toResponseDTO(consulta);
     }
 
-    // Retorna o histórico longitudinal do Pet, ordenado da mais recente para a mais antiga
     public List<ConsultaResponseDTO> listarHistoricoPorPet(Long petId) {
         return consultaRepository.findByPetIdOrderByDataConsultaDesc(petId).stream()
                 .map(this::toResponseDTO)

@@ -33,7 +33,6 @@ public class MedicamentoController {
         return ResponseEntity.ok(medicamentoService.listarPorConsulta(consultaId));
     }
 
-    // ENDPOINT DO "CHECK" (Registra que o tutor deu a dose)
     @PostMapping("/doses/check")
     public ResponseEntity<HistoricoDoseResponseDTO> registrarDose(@Valid @RequestBody HistoricoDoseRequestDTO request) {
         HistoricoDoseResponseDTO response = medicamentoService.registrarDose(request);
