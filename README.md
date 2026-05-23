@@ -1,6 +1,5 @@
-================================================================================
+
              CLYVO PAWS (CLYVO VET) - FIAP CHALLENGE 2026
-================================================================================
 
 API RESTful desenvolvida para o sistema de gerenciamento veterinario Clyvo Paws. 
 Este projeto visa digitalizar e otimizar o atendimento clinico, historico medico 
@@ -86,5 +85,3 @@ Principais Endpoints:
 * GET /consultas/pet/{petId}: Historico medico de um pet especifico (Paginado).
 * POST /medicamentos/doses/check: Registra a tomada de uma dose de medicamento.
 * GET /planos-preventivos: Retorna diretrizes medicas baseadas na especie.
-
-================================================================================
