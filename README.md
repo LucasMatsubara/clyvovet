@@ -1,5 +1,4 @@
-
-             CLYVO PAWS (CLYVO VET) - FIAP CHALLENGE 2026
+# CLYVO PAWS (CLYVO VET) - FIAP CHALLENGE 2026
 
 API RESTful desenvolvida para o sistema de gerenciamento veterinario Clyvo Paws. 
 Este projeto visa digitalizar e otimizar o atendimento clinico, historico medico 
@@ -7,14 +6,14 @@ e acompanhamento preventivo de pets, facilitando a comunicacao entre a clinica e
 os tutores.
 
 --------------------------------------------------------------------------------
-👥 INTEGRANTES DO GRUPO (Turma: 2TDSPX)
+## 👥 INTEGRANTES DO GRUPO (Turma: 2TDSPX)
 --------------------------------------------------------------------------------
 * João Pedro Pereira Camilo       | RM: 562005
 * Lucas Matsubara Reis            | RM: 565020
 * Pamella Christiny Chaves Brito  | RM: 565206
 
 --------------------------------------------------------------------------------
-🚀 TECNOLOGIAS UTILIZADAS
+## 🚀 TECNOLOGIAS UTILIZADAS
 --------------------------------------------------------------------------------
 O projeto foi desenvolvido com foco em performance, escalabilidade e boas 
 praticas de engenharia de software (SOLID e Clean Code):
@@ -27,7 +26,7 @@ praticas de engenharia de software (SOLID e Clean Code):
 * Maven (Gerenciador de dependencias)
 
 --------------------------------------------------------------------------------
-🏗️ ARQUITETURA E PADROES IMPLEMENTADOS
+## 🏗️ ARQUITETURA E PADROES IMPLEMENTADOS
 --------------------------------------------------------------------------------
 * Data Transfer Objects (DTOs): Separacao estrita entre a camada de persistencia 
   (Entities) e a camada de apresentacao, prevenindo exposicao acidental de dados 
@@ -45,7 +44,7 @@ praticas de engenharia de software (SOLID e Clean Code):
   JSON para facilitar o consumo pelo Front-end.
 
 --------------------------------------------------------------------------------
-⚙️ COMO EXECUTAR O PROJETO LOCALMENTE
+## ⚙️ COMO EXECUTAR O PROJETO LOCALMENTE
 --------------------------------------------------------------------------------
 
 1. Pre-requisitos
@@ -72,7 +71,7 @@ praticas de engenharia de software (SOLID e Clean Code):
    ClyvovetApplication).
 
 --------------------------------------------------------------------------------
-📚 DOCUMENTACAO DA API (SWAGGER)
+## 📚 DOCUMENTACAO DA API (SWAGGER)
 --------------------------------------------------------------------------------
 Com a aplicacao em execucao, acesse a documentacao interativa para visualizar 
 e testar todos os endpoints:
@@ -85,3 +84,4 @@ Principais Endpoints:
 * GET /consultas/pet/{petId}: Historico medico de um pet especifico (Paginado).
 * POST /medicamentos/doses/check: Registra a tomada de uma dose de medicamento.
 * GET /planos-preventivos: Retorna diretrizes medicas baseadas na especie.
+--------------------------------------------------------------------------------
