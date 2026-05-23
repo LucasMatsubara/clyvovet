@@ -1,7 +1,7 @@
 # CLYVO PAWS (CLYVO VET) - FIAP CHALLENGE 2026
 
 API RESTful desenvolvida para o sistema de gerenciamento veterinario Clyvo Paws. 
-Este projeto visa digitalizar e otimizar o atendimento clinico, historico medico 
+Este projeto visa digitalizar e otimizar o atendimento clínico, histórico médico 
 e acompanhamento preventivo de pets.
 
 --------------------------------------------------------------------------------
@@ -38,6 +38,6 @@ Todos os documentos probatorios estao na pasta raiz do projeto na pasta "/docume
 --------------------------------------------------------------------------------
 1. Configure suas credenciais do Banco de Dados Oracle no arquivo 'application.properties'.
 2. Execute o projeto via Maven: 'mvn spring-boot:run' ou pela sua IDE.
-3. Acesse a documentacao do Swagger: http://localhost:8080/swagger-ui.html
+3. Acesse a documentação do Swagger: http://localhost:8080/swagger-ui.html
 
 --------------------------------------------------------------------------------
