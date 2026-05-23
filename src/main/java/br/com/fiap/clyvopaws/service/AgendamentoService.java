@@ -1,15 +1,14 @@
 package br.com.fiap.clyvopaws.service;
 
-import br.com.fiap.clyvopaws.dto.AgendamentoRequestDTO;
-import br.com.fiap.clyvopaws.dto.AgendamentoResponseDTO;
-import br.com.fiap.clyvopaws.model.Agendamento;
-import br.com.fiap.clyvopaws.model.Consulta;
-import br.com.fiap.clyvopaws.repository.AgendamentoRepository;
-import br.com.fiap.clyvopaws.repository.ConsultaRepository;
+import br.com.fiap.clyvopaws.dto.*;
+import br.com.fiap.clyvopaws.model.*;
+import br.com.fiap.clyvopaws.repository.*;
+
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +17,7 @@ import java.util.stream.Collectors;
 public class AgendamentoService {
     private final AgendamentoRepository agendamentoRepository;
     private final ConsultaRepository consultaRepository;
+    private final ConsultaService consultaService;
 
     @Transactional
     public AgendamentoResponseDTO cadastrar(AgendamentoRequestDTO request) {
@@ -30,11 +30,13 @@ public class AgendamentoService {
         return toResponseDTO(agendamentoRepository.save(agendamento));
     }
 
+    @Transactional(readOnly = true)
     public AgendamentoResponseDTO buscarPorId(Long id) {
         Agendamento ag = agendamentoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Agendamento não encontrado."));
         return toResponseDTO(ag);
     }
 
+    @Transactional(readOnly = true)
     public List<AgendamentoResponseDTO> listarPorConsulta(Long consultaId) {
         return agendamentoRepository.findByConsultaId(consultaId).stream().map(this::toResponseDTO).collect(Collectors.toList());
     }
@@ -55,6 +57,7 @@ public class AgendamentoService {
     }
 
     private AgendamentoResponseDTO toResponseDTO(Agendamento agendamento) {
-        return new AgendamentoResponseDTO(agendamento.getId(), agendamento.getDataHora(), agendamento.getTitulo(), agendamento.getDescricao(), agendamento.getConsulta().getId());
+        ConsultaResponseDTO consultaDTO = consultaService.toResponseDTO(agendamento.getConsulta());
+        return new AgendamentoResponseDTO(agendamento.getId(), agendamento.getDataHora(), agendamento.getTitulo(), agendamento.getDescricao(), consultaDTO);
     }
 }

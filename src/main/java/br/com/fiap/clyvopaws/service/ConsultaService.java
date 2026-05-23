@@ -1,24 +1,22 @@
 package br.com.fiap.clyvopaws.service;
 
-import br.com.fiap.clyvopaws.dto.ConsultaRequestDTO;
-import br.com.fiap.clyvopaws.dto.ConsultaResponseDTO;
-import br.com.fiap.clyvopaws.model.Consulta;
-import br.com.fiap.clyvopaws.model.Pet;
-import br.com.fiap.clyvopaws.repository.ConsultaRepository;
-import br.com.fiap.clyvopaws.repository.PetRepository;
+import br.com.fiap.clyvopaws.dto.*;
+import br.com.fiap.clyvopaws.model.*;
+import br.com.fiap.clyvopaws.repository.*;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ConsultaService {
     private final ConsultaRepository consultaRepository;
     private final PetRepository petRepository;
+    private final PetService petService;
 
     @Transactional
     public ConsultaResponseDTO cadastrar(ConsultaRequestDTO request) {
@@ -32,13 +30,15 @@ public class ConsultaService {
         return toResponseDTO(consultaRepository.save(consulta));
     }
 
+    @Transactional(readOnly = true)
     public ConsultaResponseDTO buscarPorId(Long id) {
         Consulta consulta = consultaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Consulta não encontrada."));
         return toResponseDTO(consulta);
     }
 
-    public List<ConsultaResponseDTO> listarHistoricoPorPet(Long petId) {
-        return consultaRepository.findByPetIdOrderByDataConsultaDesc(petId).stream().map(this::toResponseDTO).collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public Page<ConsultaResponseDTO> listarHistoricoPorPet(Long petId, Pageable pageable) {
+        return consultaRepository.findByPetIdOrderByDataConsultaDesc(petId, pageable).map(this::toResponseDTO);
     }
 
     @Transactional
@@ -57,7 +57,8 @@ public class ConsultaService {
         consultaRepository.deleteById(id);
     }
 
-    private ConsultaResponseDTO toResponseDTO(Consulta consulta) {
-        return new ConsultaResponseDTO(consulta.getId(), consulta.getDataConsulta(), consulta.getClinica(), consulta.getNomeVeterinario(), consulta.getLaudo(), consulta.getPet().getId());
+    public ConsultaResponseDTO toResponseDTO(Consulta consulta) {
+        PetResponseDTO petDTO = petService.toResponseDTO(consulta.getPet());
+        return new ConsultaResponseDTO(consulta.getId(), consulta.getDataConsulta(), consulta.getClinica(), consulta.getNomeVeterinario(), consulta.getLaudo(), petDTO);
     }
 }

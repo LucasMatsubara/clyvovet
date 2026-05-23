@@ -3,6 +3,8 @@ package br.com.fiap.clyvopaws.controller;
 import br.com.fiap.clyvopaws.dto.AgendamentoRequestDTO;
 import br.com.fiap.clyvopaws.dto.AgendamentoResponseDTO;
 import br.com.fiap.clyvopaws.service.AgendamentoService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/agendamentos")
 @RequiredArgsConstructor
+@Tag(name = "Agendamentos", description = "Endpoints de retornos e lembretes de vacinas/avaliações")
 public class AgendamentoController {
     private final AgendamentoService agendamentoService;
 

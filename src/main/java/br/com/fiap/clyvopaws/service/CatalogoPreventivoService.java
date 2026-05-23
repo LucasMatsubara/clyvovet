@@ -1,14 +1,15 @@
 package br.com.fiap.clyvopaws.service;
 
-import br.com.fiap.clyvopaws.dto.CatalogoPreventivoRequestDTO;
-import br.com.fiap.clyvopaws.dto.CatalogoPreventivoResponseDTO;
+import br.com.fiap.clyvopaws.dto.*;
 import br.com.fiap.clyvopaws.enums.Especie;
 import br.com.fiap.clyvopaws.model.CatalogoPreventivo;
 import br.com.fiap.clyvopaws.repository.CatalogoPreventivoRepository;
+
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,10 +18,21 @@ import java.util.stream.Collectors;
 public class CatalogoPreventivoService {
     private final CatalogoPreventivoRepository catalogoPreventivoRepository;
 
-    public List<CatalogoPreventivoResponseDTO> buscarPlanoPreventivo(Especie especie, String raca) {
-        return catalogoPreventivoRepository.findByEspecieAndRacaIgnoreCase(especie.name(), raca).stream().map(this::toResponseDTO).collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public List<CatalogoPreventivoResponseDTO> buscarPlanoPreventivo(String especieRecebida) {
+        try {
+            Especie especieEnum = Especie.valueOf(especieRecebida.toUpperCase());
+
+            return catalogoPreventivoRepository.findByEspecie(especieEnum).stream()
+                    .map(this::toResponseDTO)
+                    .collect(Collectors.toList());
+
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Espécie inválida. Utilize CACHORRO ou GATO.");
+        }
     }
 
+    @Transactional(readOnly = true)
     public CatalogoPreventivoResponseDTO buscarPorId(Long id) {
         CatalogoPreventivo cat = catalogoPreventivoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Diretriz não encontrada."));
         return toResponseDTO(cat);

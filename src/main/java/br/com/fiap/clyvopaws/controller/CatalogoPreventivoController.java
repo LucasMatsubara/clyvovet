@@ -2,8 +2,10 @@ package br.com.fiap.clyvopaws.controller;
 
 import br.com.fiap.clyvopaws.dto.CatalogoPreventivoRequestDTO;
 import br.com.fiap.clyvopaws.dto.CatalogoPreventivoResponseDTO;
-import br.com.fiap.clyvopaws.enums.Especie;
 import br.com.fiap.clyvopaws.service.CatalogoPreventivoService;
+
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,16 +18,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/planos-preventivos")
 @RequiredArgsConstructor
+@Tag(name = "Catálogo Preventivo", description = "Diretrizes médicas de predição baseadas em espécie e raça")
 public class CatalogoPreventivoController {
     private final CatalogoPreventivoService catalogoPreventivoService;
 
     @GetMapping
     public ResponseEntity<List<CatalogoPreventivoResponseDTO>> buscarPlanoPreventivo(
-            @RequestParam("especie") Especie especie,
-            @RequestParam("raca") String raca) {
-        return ResponseEntity.ok(catalogoPreventivoService.buscarPlanoPreventivo(especie, raca));
-    }
+            @Parameter(description = "Digite a espécie (ex: CACHORRO, GATO)")
+            @RequestParam("especie") String especie) {
 
+        return ResponseEntity.ok(catalogoPreventivoService.buscarPlanoPreventivo(especie));
+    }
     @GetMapping("/{id}")
     public ResponseEntity<CatalogoPreventivoResponseDTO> buscarPorId(@PathVariable("id") Long id) {
         return ResponseEntity.ok(catalogoPreventivoService.buscarPorId(id));

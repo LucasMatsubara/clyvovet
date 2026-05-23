@@ -1,17 +1,16 @@
 package br.com.fiap.clyvopaws.service;
 
-import br.com.fiap.clyvopaws.dto.PetRequestDTO;
-import br.com.fiap.clyvopaws.dto.PetResponseDTO;
-import br.com.fiap.clyvopaws.model.Pet;
-import br.com.fiap.clyvopaws.model.Tutor;
-import br.com.fiap.clyvopaws.repository.PetRepository;
-import br.com.fiap.clyvopaws.repository.TutorRepository;
+import br.com.fiap.clyvopaws.dto.*;
+import br.com.fiap.clyvopaws.model.*;
+import br.com.fiap.clyvopaws.repository.*;
+
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,15 +36,18 @@ public class PetService {
         return toResponseDTO(petRepository.save(pet));
     }
 
+    @Transactional(readOnly = true)
     public PetResponseDTO buscarPorId(Long id) {
         Pet pet = petRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Pet não encontrado."));
         return toResponseDTO(pet);
     }
 
+    @Transactional(readOnly = true)
     public List<PetResponseDTO> listarPorTutor(Long tutorId) {
         return petRepository.findByTutorId(tutorId).stream().map(this::toResponseDTO).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public Page<PetResponseDTO> listarTodosPaginado(Pageable pageable) {
         return petRepository.findAll(pageable).map(this::toResponseDTO);
     }
@@ -66,7 +68,10 @@ public class PetService {
         petRepository.deleteById(id);
     }
 
-    private PetResponseDTO toResponseDTO(Pet pet) {
-        return new PetResponseDTO(pet.getId(), pet.getNome(), pet.getEspecie(), pet.getRaca(), pet.getPeso(), pet.getSexo(), pet.getDataNascimento(), pet.getDescricao(), pet.getFotoUrl(), pet.getTutor().getId());
+    public PetResponseDTO toResponseDTO(Pet pet) {
+        Tutor t = pet.getTutor();
+        TutorResumoDTO tutorDTO = new TutorResumoDTO(t.getId(), t.getNomeCompleto());
+
+        return new PetResponseDTO(pet.getId(), pet.getNome(), pet.getEspecie(), pet.getRaca(), pet.getPeso(), pet.getSexo(), pet.getDataNascimento(), pet.getDescricao(), pet.getFotoUrl(), tutorDTO);
     }
 }

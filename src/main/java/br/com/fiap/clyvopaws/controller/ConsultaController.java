@@ -3,18 +3,24 @@ package br.com.fiap.clyvopaws.controller;
 import br.com.fiap.clyvopaws.dto.ConsultaRequestDTO;
 import br.com.fiap.clyvopaws.dto.ConsultaResponseDTO;
 import br.com.fiap.clyvopaws.service.ConsultaService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/consultas")
 @RequiredArgsConstructor
+@Tag(name = "Consultas", description = "Endpoints de consultas médicas e histórico veterinário")
 public class ConsultaController {
     private final ConsultaService consultaService;
 
@@ -31,8 +37,10 @@ public class ConsultaController {
     }
 
     @GetMapping("/pet/{petId}")
-    public ResponseEntity<List<ConsultaResponseDTO>> listarHistorico(@PathVariable("petId") Long petId) {
-        return ResponseEntity.ok(consultaService.listarHistoricoPorPet(petId));
+    public ResponseEntity<Page<ConsultaResponseDTO>> listarHistorico(
+            @PathVariable("petId") Long petId,
+            @ParameterObject @PageableDefault(size = 5, sort = "dataConsulta") Pageable pageable) {
+        return ResponseEntity.ok(consultaService.listarHistoricoPorPet(petId, pageable));
     }
 
     @PutMapping("/{id}")

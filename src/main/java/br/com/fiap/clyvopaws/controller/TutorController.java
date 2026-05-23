@@ -3,6 +3,8 @@ package br.com.fiap.clyvopaws.controller;
 import br.com.fiap.clyvopaws.dto.TutorRequestDTO;
 import br.com.fiap.clyvopaws.dto.TutorResponseDTO;
 import br.com.fiap.clyvopaws.service.TutorService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import java.net.URI;
 @RestController
 @RequestMapping("/tutores")
 @RequiredArgsConstructor
+@Tag(name = "Tutores", description = "Endpoints para gerenciamento de tutores e seus dados")
 public class TutorController {
     private final TutorService tutorService;
 

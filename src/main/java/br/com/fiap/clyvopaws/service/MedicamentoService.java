@@ -1,21 +1,15 @@
 package br.com.fiap.clyvopaws.service;
 
-import br.com.fiap.clyvopaws.dto.HistoricoDoseRequestDTO;
-import br.com.fiap.clyvopaws.dto.HistoricoDoseResponseDTO;
-import br.com.fiap.clyvopaws.dto.MedicamentoRequestDTO;
-import br.com.fiap.clyvopaws.dto.MedicamentoResponseDTO;
-import br.com.fiap.clyvopaws.model.Consulta;
-import br.com.fiap.clyvopaws.model.HistoricoDose;
-import br.com.fiap.clyvopaws.model.Medicamento;
-import br.com.fiap.clyvopaws.repository.ConsultaRepository;
-import br.com.fiap.clyvopaws.repository.HistoricoDoseRepository;
-import br.com.fiap.clyvopaws.repository.MedicamentoRepository;
+import br.com.fiap.clyvopaws.dto.*;
+import br.com.fiap.clyvopaws.model.*;
+import br.com.fiap.clyvopaws.repository.*;
+
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +17,7 @@ public class MedicamentoService {
     private final MedicamentoRepository medicamentoRepository;
     private final ConsultaRepository consultaRepository;
     private final HistoricoDoseRepository historicoDoseRepository;
+    private final ConsultaService consultaService;
 
     @Transactional
     public MedicamentoResponseDTO cadastrar(MedicamentoRequestDTO request) {
@@ -38,13 +33,15 @@ public class MedicamentoService {
         return toResponseDTO(medicamentoRepository.save(medicamento));
     }
 
+    @Transactional(readOnly = true)
     public MedicamentoResponseDTO buscarPorId(Long id) {
         Medicamento med = medicamentoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medicamento não encontrado."));
         return toResponseDTO(med);
     }
 
-    public List<MedicamentoResponseDTO> listarPorConsulta(Long consultaId) {
-        return medicamentoRepository.findByConsultaId(consultaId).stream().map(this::toResponseDTO).collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public Page<MedicamentoResponseDTO> listarPorConsulta(Long consultaId, Pageable pageable) {
+        return medicamentoRepository.findByConsultaId(consultaId, pageable).map(this::toResponseDTO);
     }
 
     @Transactional
@@ -54,7 +51,7 @@ public class MedicamentoService {
         dose.setDataHoraToma(request.dataHoraToma());
         dose.setMedicamento(medicamento);
         dose = historicoDoseRepository.save(dose);
-        return new HistoricoDoseResponseDTO(dose.getId(), dose.getDataHoraToma(), medicamento.getId());
+        return new HistoricoDoseResponseDTO(dose.getId(), dose.getDataHoraToma(), toResponseDTO(medicamento));
     }
 
     @Transactional
@@ -73,6 +70,7 @@ public class MedicamentoService {
     }
 
     private MedicamentoResponseDTO toResponseDTO(Medicamento medicamento) {
-        return new MedicamentoResponseDTO(medicamento.getId(), medicamento.getNome(), medicamento.getDosagem(), medicamento.getFrequencia(), medicamento.getDataInicio(), medicamento.getDuracaoDias(), medicamento.getStatus(), medicamento.getConsulta().getId());
+        ConsultaResponseDTO consultaDTO = consultaService.toResponseDTO(medicamento.getConsulta());
+        return new MedicamentoResponseDTO(medicamento.getId(), medicamento.getNome(), medicamento.getDosagem(), medicamento.getFrequencia(), medicamento.getDataInicio(), medicamento.getDuracaoDias(), medicamento.getStatus(), consultaDTO);
     }
 }

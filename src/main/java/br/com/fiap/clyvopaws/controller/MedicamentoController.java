@@ -5,18 +5,24 @@ import br.com.fiap.clyvopaws.dto.HistoricoDoseResponseDTO;
 import br.com.fiap.clyvopaws.dto.MedicamentoRequestDTO;
 import br.com.fiap.clyvopaws.dto.MedicamentoResponseDTO;
 import br.com.fiap.clyvopaws.service.MedicamentoService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/medicamentos")
 @RequiredArgsConstructor
+@Tag(name = "Medicamentos", description = "Endpoints de tratamentos e registro de doses (checks)")
 public class MedicamentoController {
     private final MedicamentoService medicamentoService;
 
@@ -33,8 +39,10 @@ public class MedicamentoController {
     }
 
     @GetMapping("/consulta/{consultaId}")
-    public ResponseEntity<List<MedicamentoResponseDTO>> listarPorConsulta(@PathVariable("consultaId") Long consultaId) {
-        return ResponseEntity.ok(medicamentoService.listarPorConsulta(consultaId));
+    public ResponseEntity<Page<MedicamentoResponseDTO>> listarPorConsulta(
+            @PathVariable("consultaId") Long consultaId,
+            @ParameterObject @PageableDefault(size = 10, sort = "dataInicio") Pageable pageable) {
+        return ResponseEntity.ok(medicamentoService.listarPorConsulta(consultaId, pageable));
     }
 
     @PostMapping("/doses/check")

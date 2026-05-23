@@ -3,9 +3,11 @@ package br.com.fiap.clyvopaws.controller;
 import br.com.fiap.clyvopaws.dto.PetRequestDTO;
 import br.com.fiap.clyvopaws.dto.PetResponseDTO;
 import br.com.fiap.clyvopaws.service.PetService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -19,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/pets")
 @RequiredArgsConstructor
+@Tag(name = "Pets", description = "Endpoints para gerenciamento dos pets")
 public class PetController {
     private final PetService petService;
 
@@ -30,7 +33,6 @@ public class PetController {
     }
 
     @GetMapping("/{id}")
-    @Cacheable(value = "pets", key = "#id")
     public ResponseEntity<PetResponseDTO> buscarPorId(@PathVariable("id") Long id) {
         return ResponseEntity.ok(petService.buscarPorId(id));
     }
@@ -41,7 +43,8 @@ public class PetController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<PetResponseDTO>> listarTodos(@PageableDefault(size = 10, sort = "nome") Pageable pageable) {
+    public ResponseEntity<Page<PetResponseDTO>> listarTodos(
+            @ParameterObject @PageableDefault(size = 10, sort = "nome") Pageable pageable) {
         return ResponseEntity.ok(petService.listarTodosPaginado(pageable));
     }
 
