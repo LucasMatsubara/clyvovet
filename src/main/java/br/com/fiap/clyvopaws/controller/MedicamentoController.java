@@ -36,6 +36,6 @@ public class MedicamentoController {
     @PostMapping("/doses/check")
     public ResponseEntity<HistoricoDoseResponseDTO> registrarDose(@Valid @RequestBody HistoricoDoseRequestDTO request) {
         HistoricoDoseResponseDTO response = medicamentoService.registrarDose(request);
-        return ResponseEntity.status(201).body(response); // 201 Created
+        return ResponseEntity.status(201).body(response);
     }
 }
