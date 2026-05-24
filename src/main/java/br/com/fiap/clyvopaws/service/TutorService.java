@@ -6,6 +6,8 @@ import br.com.fiap.clyvopaws.repository.TutorRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +20,8 @@ public class TutorService {
 
     @Transactional
     public TutorResponseDTO cadastrar(TutorRequestDTO request) {
-        if (tutorRepository.existsByEmail(request.email())) throw new IllegalArgumentException("E-mail já registado.");
-        if (tutorRepository.existsByCpf(request.cpf())) throw new IllegalArgumentException("CPF já registado.");
+        if (tutorRepository.existsByEmail(request.email())) throw new IllegalArgumentException("E-mail já cadastrado.");
+        if (tutorRepository.existsByCpf(request.cpf())) throw new IllegalArgumentException("CPF já cadastrado.");
 
         Tutor tutor = new Tutor();
         tutor.setNomeCompleto(request.nomeCompleto());
@@ -47,6 +49,11 @@ public class TutorService {
     public TutorResponseDTO buscarPorId(Long id) {
         Tutor tutor = tutorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tutor não encontrado."));
         return toResponseDTO(tutor);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<TutorResponseDTO> listarTodos(Pageable pageable) {
+        return tutorRepository.findAll(pageable).map(this::toResponseDTO);
     }
 
     @Transactional

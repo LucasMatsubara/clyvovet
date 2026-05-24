@@ -35,6 +35,12 @@ public class MedicamentoController {
         return ResponseEntity.ok(medicamentoService.buscarPorId(id));
     }
 
+    @GetMapping
+    public ResponseEntity<Page<MedicamentoResponseDTO>> listarTodos(
+            @ParameterObject @PageableDefault(size = 10, sort = "dataInicio") Pageable pageable) {
+        return ResponseEntity.ok(medicamentoService.listarTodos(pageable));
+    }
+
     @GetMapping("/consulta/{consultaId}")
     public ResponseEntity<Page<MedicamentoResponseDTO>> listarPorConsulta(
             @PathVariable("consultaId") Long consultaId,

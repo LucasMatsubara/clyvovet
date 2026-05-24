@@ -35,6 +35,12 @@ public class ConsultaController {
         return ResponseEntity.ok(consultaService.buscarPorId(id));
     }
 
+    @GetMapping
+    public ResponseEntity<Page<ConsultaResponseDTO>> listarTodas(
+            @ParameterObject @PageableDefault(size = 10, sort = "dataConsulta") Pageable pageable) {
+        return ResponseEntity.ok(consultaService.listarTodas(pageable));
+    }
+
     @GetMapping("/pet/{petId}")
     public ResponseEntity<Page<ConsultaResponseDTO>> listarHistorico(
             @PathVariable("petId") Long petId,

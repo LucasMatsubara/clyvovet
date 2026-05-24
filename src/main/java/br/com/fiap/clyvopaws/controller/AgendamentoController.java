@@ -6,6 +6,10 @@ import br.com.fiap.clyvopaws.service.AgendamentoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -30,6 +34,12 @@ public class AgendamentoController {
     @GetMapping("/{id}")
     public ResponseEntity<AgendamentoResponseDTO> buscarPorId(@PathVariable("id") Long id) {
         return ResponseEntity.ok(agendamentoService.buscarPorId(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<AgendamentoResponseDTO>> listarTodos(
+            @ParameterObject @PageableDefault(size = 10, sort = "dataHora") Pageable pageable) {
+        return ResponseEntity.ok(agendamentoService.listarTodos(pageable));
     }
 
     @GetMapping("/consulta/{consultaId}")

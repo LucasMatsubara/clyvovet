@@ -6,6 +6,8 @@ import br.com.fiap.clyvopaws.repository.*;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +36,11 @@ public class AgendamentoService {
     public AgendamentoResponseDTO buscarPorId(Long id) {
         Agendamento ag = agendamentoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Agendamento não encontrado."));
         return toResponseDTO(ag);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<AgendamentoResponseDTO> listarTodos(Pageable pageable) {
+        return agendamentoRepository.findAll(pageable).map(this::toResponseDTO);
     }
 
     @Transactional(readOnly = true)

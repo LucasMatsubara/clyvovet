@@ -39,6 +39,11 @@ public class ConsultaService {
         return toResponseDTO(consulta);
     }
 
+    @Transactional(readOnly = true)
+    public Page<ConsultaResponseDTO> listarTodas(Pageable pageable) {
+        return consultaRepository.findAll(pageable).map(this::toResponseDTO);
+    }
+
     @Cacheable(value = "historicoConsultas")
     @Transactional(readOnly = true)
     public Page<ConsultaResponseDTO> listarHistoricoPorPet(Long petId, Pageable pageable) {

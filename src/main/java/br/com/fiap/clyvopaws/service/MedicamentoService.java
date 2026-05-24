@@ -40,6 +40,11 @@ public class MedicamentoService {
     }
 
     @Transactional(readOnly = true)
+    public Page<MedicamentoResponseDTO> listarTodos(Pageable pageable) {
+        return medicamentoRepository.findAll(pageable).map(this::toResponseDTO);
+    }
+
+    @Transactional(readOnly = true)
     public Page<MedicamentoResponseDTO> listarPorConsulta(Long consultaId, Pageable pageable) {
         return medicamentoRepository.findByConsultaId(consultaId, pageable).map(this::toResponseDTO);
     }

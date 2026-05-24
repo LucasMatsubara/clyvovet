@@ -6,6 +6,10 @@ import br.com.fiap.clyvopaws.service.TutorService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -29,6 +33,12 @@ public class TutorController {
     @GetMapping("/{id}")
     public ResponseEntity<TutorResponseDTO> buscarPorId(@PathVariable("id") Long id) {
         return ResponseEntity.ok(tutorService.buscarPorId(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<TutorResponseDTO>> listarTodos(
+            @ParameterObject @PageableDefault(size = 10, sort = "nomeCompleto") Pageable pageable) {
+        return ResponseEntity.ok(tutorService.listarTodos(pageable));
     }
 
     @PutMapping("/{id}")

@@ -7,6 +7,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -17,17 +21,23 @@ import java.util.List;
 @RestController
 @RequestMapping("/planos-preventivos")
 @RequiredArgsConstructor
-@Tag(name = "Catálogo Preventivo", description = "Diretrizes médicas de predição baseadas em espécie e raça")
+@Tag(name = "Catálogo Preventivo", description = "Diretrizes médicas de predição baseadas em espécie")
 public class CatalogoPreventivoController {
     private final CatalogoPreventivoService catalogoPreventivoService;
 
     @GetMapping
+    public ResponseEntity<Page<CatalogoPreventivoResponseDTO>> listarTodos(
+            @ParameterObject @PageableDefault(size = 10, sort = "especie") Pageable pageable) {
+        return ResponseEntity.ok(catalogoPreventivoService.listarTodos(pageable));
+    }
+
+    @GetMapping("/busca")
     public ResponseEntity<List<CatalogoPreventivoResponseDTO>> buscarPlanoPreventivo(
             @Parameter(description = "Digite a espécie (ex: CACHORRO, GATO)")
             @RequestParam("especie") String especie) {
-
         return ResponseEntity.ok(catalogoPreventivoService.buscarPlanoPreventivo(especie));
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<CatalogoPreventivoResponseDTO> buscarPorId(@PathVariable("id") Long id) {
         return ResponseEntity.ok(catalogoPreventivoService.buscarPorId(id));
