@@ -1,7 +1,6 @@
 package br.com.fiap.clyvopaws.controller;
 
-import br.com.fiap.clyvopaws.dto.AgendamentoRequestDTO;
-import br.com.fiap.clyvopaws.dto.AgendamentoResponseDTO;
+import br.com.fiap.clyvopaws.dto.*;
 import br.com.fiap.clyvopaws.service.AgendamentoService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,7 +1,6 @@
 package br.com.fiap.clyvopaws.controller;
 
-import br.com.fiap.clyvopaws.dto.CatalogoPreventivoRequestDTO;
-import br.com.fiap.clyvopaws.dto.CatalogoPreventivoResponseDTO;
+import br.com.fiap.clyvopaws.dto.*;
 import br.com.fiap.clyvopaws.service.CatalogoPreventivoService;
 
 import io.swagger.v3.oas.annotations.Parameter;

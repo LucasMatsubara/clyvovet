@@ -1,7 +1,6 @@
 package br.com.fiap.clyvopaws.controller;
 
-import br.com.fiap.clyvopaws.dto.PetRequestDTO;
-import br.com.fiap.clyvopaws.dto.PetResponseDTO;
+import br.com.fiap.clyvopaws.dto.*;
 import br.com.fiap.clyvopaws.service.PetService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,9 +1,6 @@
 package br.com.fiap.clyvopaws.controller;
 
-import br.com.fiap.clyvopaws.dto.HistoricoDoseRequestDTO;
-import br.com.fiap.clyvopaws.dto.HistoricoDoseResponseDTO;
-import br.com.fiap.clyvopaws.dto.MedicamentoRequestDTO;
-import br.com.fiap.clyvopaws.dto.MedicamentoResponseDTO;
+import br.com.fiap.clyvopaws.dto.*;
 import br.com.fiap.clyvopaws.service.MedicamentoService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
